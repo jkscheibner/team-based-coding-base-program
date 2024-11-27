@@ -2,7 +2,9 @@
 generateAnalysis = function() {
     
     # read in data
-    data = read.csv(here("data", "data.csv"))
+    #data = read.csv(here("data", "data.csv"))
+    base_path = getwd()
+    data = read.csv(paste(base_path, "/data/data.csv", sep=""))
 
     # Base regressions
     reg_base = lm(OUTPUT_TONNES ~ RAINFALL_PERCENTILE + LABOUR_DAYS + IRRIGATION_BOOLEAN, data=data)
@@ -53,4 +55,59 @@ generateAnalysis = function() {
     bic_reg_fe_clean = BIC(reg_fe_clean)
     bic_reg_time_fe_clean = BIC(reg_time_fe_clean)
 
+    #results_folder_path = paste(base_path, "/results", sep="")
+    results_folder_path = createPath("/results")
+    #results_file_path = paste(results_folder_path, "/temp_results.Rdata", sep="")
+    results_file_path = createPath("/results/temp_results.Rdata")
+
+    if(dir.exists(results_folder_path)){
+        #if temp results exists then delete
+        if(file.exists(results_file_path)){
+            file.remove(results_file_path)
+        }
+    # otherwise create directory
+    } else {
+        dir.create(results_folder_path)
+    }
+
+    ## save environment for use later ##
+    save (
+        reg_base, 
+        reg_time, 
+        reg_fe, 
+        reg_time_fe, 
+        reg_base_clean, 
+        reg_time_clean, 
+        reg_fe_clean, 
+        reg_time_fe_clean, 
+        anova_base__time_raw,
+        anova_base__fe_raw,
+        anova_base__time_fe_raw,
+        anova_fe__time_fe_raw, 
+        anova_time__time_fe_raw,
+        anova_base__time_clean,
+        anova_base__fe_clean,
+        anova_base__time_fe_clean,
+        anova_fe__time_fe_clean,
+        anova_time__time_fe_clean,
+        aic_reg_base_raw,
+        aic_reg_time_raw,
+        aic_reg_fe_raw,
+        aic_reg_time_fe_raw,
+        aic_reg_base_clean,
+        aic_reg_time_clean,
+        aic_reg_fe_clean,
+        aic_reg_time_fe_clean,
+        bic_reg_base_raw,
+        bic_reg_time_raw,
+        bic_reg_fe_raw,
+        bic_reg_time_fe_raw,
+        bic_reg_base_clean,
+        bic_reg_time_clean,
+        bic_reg_fe_clean,
+        bic_reg_time_fe_clean,
+
+        file=paste(results_file_path, sep="")
+        #file=paste(base_path, "/results/temp_results.Rdata", sep="")
+    )
 }

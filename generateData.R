@@ -1,6 +1,3 @@
-
-
-
 generateData = function() {
     #Start by creating an ID vector based on 'regions' (group)
     group_vals = c("A", "B", "C", "D", "E") #alphanumeric component of id - represents a group
